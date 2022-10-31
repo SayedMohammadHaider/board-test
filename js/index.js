@@ -42,8 +42,11 @@ function heroClick() {
             placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + result.image + '" />';
             placedCardBorderLeft++;
             if (matchResult && matchResult.botWins == false) {
-                document.getElementById("playerWinnerBoxId").style.display = "block";
+                // document.getElementById("playerWinnerBoxId").style.display = "block";
+                // document.getElementById('setupDialogBox').style.visibility = "visible";
+                // document.getElementById('winMessage').innerHTML = 'You lose';
                 isGameEnd = true;
+                wonMessage(false);
                 return;
             }
             playerCurrentIndex = playerCurrentIndex + 1;
@@ -82,6 +85,15 @@ function botFlipCardSound() {
     botCardSound.play();
 }
 
+function wonMessage(isPlayerWon = false) {
+    document.getElementById('setupDialogBox').style.visibility = "visible";
+    var message = "You Lose";
+    if (isPlayerWon) {
+        message = "You Won";
+    }
+    document.getElementById('winMessage').innerHTML = message;
+}
+
 function botAutoClick() {
     if (!isGameEnd && !isBotCardEmpty) {
         release = false;
@@ -98,8 +110,11 @@ function botAutoClick() {
             botHeroNameDiv.innerHTML = '<h4>' + heroName + '</h4>';
             placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + result.image + '" />'
             if (matchResult && matchResult.botWins == true) {
-                document.getElementById("botWinnerBoxId").style.display = "block";
+                // document.getElementById("botWinnerBoxId").style.display = "block";
+                // document.getElementById('setupDialogBox').style.visibility = "visible";
+                // document.getElementById('winMessage').innerHTML = 'You Won';
                 isGameEnd = true;
+                wonMessage(true);
                 return;
             }
             if (cardLength <= botCurrentIndex + 1) {
