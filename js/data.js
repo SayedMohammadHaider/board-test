@@ -1,4 +1,4 @@
-const heroImagePath = "C:\\Users\\sayed\\OneDrive\\Desktop\\Personal\\Board\\Images\\Actors Manual Modified";
+const heroImagePath = "https:\\\\sayedhaider300.github.io\\board-test\\Images\\Actors Manual Modified";
 
 const heroNameList = [
     {
