@@ -46,7 +46,7 @@ function heroClick() {
                 // document.getElementById('setupDialogBox').style.visibility = "visible";
                 // document.getElementById('winMessage').innerHTML = 'You lose';
                 isGameEnd = true;
-                wonMessage(false);
+                wonMessage(true);
                 return;
             }
             playerCurrentIndex = playerCurrentIndex + 1;
@@ -114,7 +114,7 @@ function botAutoClick() {
                 // document.getElementById('setupDialogBox').style.visibility = "visible";
                 // document.getElementById('winMessage').innerHTML = 'You Won';
                 isGameEnd = true;
-                wonMessage(true);
+                wonMessage(false);
                 return;
             }
             if (cardLength <= botCurrentIndex + 1) {
