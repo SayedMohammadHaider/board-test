@@ -74,6 +74,7 @@ function checkMatch(matchId, isBot = true) {
         }
     }
 }
+
 var playerCardSound = new Audio(playerCardSoundBase64);
 var botCardSound = new Audio(botCardSoundBase64);
 
