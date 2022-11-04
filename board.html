@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link href="css/board.css" rel="stylesheet" />
+
+<body>
+    <div class="mainContent" id="mainContentId">
+        <header>
+            <div style="width:33%">
+
+            </div>
+            <div class="card" id="botCardId">
+                <img class="botCard" src="Images/CardBack.png" />
+            </div>
+            <div class="winnerBox" id="botWinnerBoxId">
+                Bot Wins
+            </div>
+        </header>
+        <main>
+            <div class="cardPlaced">
+                <div id="botHeroName"></div>
+                <div id="placedCardId"></div>
+                <div id="playerHeroName"></div>
+            </div>
+        </main>
+        <footer>
+            <div style="width:33%">
+
+            </div>
+            <div class="card" id="playerCardId">
+                <img onclick="heroClick()" class="playerCard" src="Images/CardBack.png" />
+            </div>
+            <div class="winnerBox" id="playerWinnerBoxId">
+                Player Wins
+            </div>
+        </footer>
+    </div>
+
+    <div id="setupDialogBox">
+        <div class="setupDialogBoxBody">
+            <p id="winMessage"></p>           
+            <a href='#' onClick="window.location.reload();">Replay</a>
+            <br>
+            <a href="index.html">Exit</a>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script src="js/data.js"></script>
+<script src="js/base64/botCardSound.js"></script>
+<script src="js/base64/playerCardSound.js"></script>
+<script src="js/board.js"></script>
