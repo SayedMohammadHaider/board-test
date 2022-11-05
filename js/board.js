@@ -13,6 +13,8 @@ var release = true;
 var isGameEnd = false;
 var isBotCardEmpty = false;
 var placedCardBorderLeft = 6;
+var loadBotImageBefore = '';
+var loadPlayerImageBefore = '';
 
 pageLoad();
 
@@ -50,7 +52,19 @@ function heroClick() {
             cards.placedCard.push(result);
             var heroName = heroNameList.find(x => x.id === result.heroMatchId).name;
             playerHeroNameDiv.innerHTML = '<h4>' + heroName + '</h4>';
-            placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + result.image + '" />';
+            var upcomingCardValue = cards.playerCard[playerCurrentIndex + 1];
+            var upcomingPlayerResult = allCard.find(({ sn }) => sn === upcomingCardValue);
+            if (loadPlayerImageBefore == '') {
+                placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + result.image + '" />';
+            }
+            else {
+                placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + loadPlayerImageBefore + '" />';
+            }
+           
+            toDataUrl(upcomingPlayerResult.image, function (myBase64) {
+                loadPlayerImageBefore = myBase64;
+            });
+
             placedCardBorderLeft++;
             if (matchResult && matchResult.botWins == false) {
                 isGameEnd = true;
@@ -103,6 +117,20 @@ function wonMessage(isPlayerWon = false) {
     document.getElementById('winMessage').innerHTML = message;
 }
 
+function toDataUrl(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            callback(reader.result);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
 function botAutoClick() {
     if (!isGameEnd && !isBotCardEmpty) {
         release = false;
@@ -115,9 +143,21 @@ function botAutoClick() {
             var result = allCard.find(({ sn }) => sn === cardValue);
             var matchResult = checkMatch(result.heroMatchId);
             cards.placedCard.push(result);
-            var heroName = heroNameList.find(x => x.id === result.heroMatchId).name;
+            var heroName = heroNameList.find(x => x.id === result.heroMatchId).name;            
             botHeroNameDiv.innerHTML = '<h4>' + heroName + '</h4>';
-            placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + result.image + '" />'
+            var upcomingCardValue = cards.botCard[botCurrentIndex + 1];
+            var upcomingBotResult = allCard.find(({ sn }) => sn === upcomingCardValue);
+            if (loadBotImageBefore == '') {
+                placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + result.image + '" />'
+            }
+            else {
+                placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + loadBotImageBefore + '" />'
+            }
+
+            toDataUrl(upcomingBotResult.image, function (myBase64) {
+                loadBotImageBefore = myBase64;
+            });
+
             if (matchResult && matchResult.botWins == true) {
                 isGameEnd = true;
                 wonMessage(false);
