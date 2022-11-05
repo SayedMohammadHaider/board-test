@@ -25,17 +25,26 @@ function pageLoad() {
             () => Math.floor(Math.random() * (max - min + 1)) + min
         );
     var botCardsList = randomIntArrayInRange(1, allCard.length, 20);
-    var playerCardsList = randomIntArrayInRange(1, allCard.length, 20);
+    var playerCardsList = randomIntArrayInRange(1, allCard.length, 20);    
+    var upcomingBotResult = allCard.find(({ sn }) => sn === botCardsList[0]);
+    toDataUrl(upcomingBotResult.image, function (myBase64) {
+        loadBotImageBefore = myBase64;
+    });
+    var upcomingPlayerResult = allCard.find(({ sn }) => sn === playerCardsList[0]);
+    toDataUrl(upcomingPlayerResult.image, function (myBase64) {
+        loadPlayerImageBefore = myBase64;
+    });
 
-    for (var i = 0; i < botCardsList.length - 1; i++) {
-        console.log(playerCardsList[i]);
-        if (allCard.find(({ sn }) => sn === botCardsList[i]).heroMatchId == allCard.find(({ sn }) => sn === playerCardsList[i + 1]).heroMatchId) {
-            console.log("player wins");
-        }
-        if (allCard.find(({ sn }) => sn === botCardsList[i]).heroMatchId == allCard.find(({ sn }) => sn === playerCardsList[i]).heroMatchId) {
-            console.log("Bot wins");
-        }
-    }
+    //// below logic is to check who wins first
+    // for (var i = 0; i < botCardsList.length - 1; i++) {
+    //     console.log(playerCardsList[i]);
+    //     if (allCard.find(({ sn }) => sn === botCardsList[i]).heroMatchId == allCard.find(({ sn }) => sn === playerCardsList[i + 1]).heroMatchId) {
+    //         console.log("player wins");
+    //     }
+    //     if (allCard.find(({ sn }) => sn === botCardsList[i]).heroMatchId == allCard.find(({ sn }) => sn === playerCardsList[i]).heroMatchId) {
+    //         console.log("Bot wins");
+    //     }
+    // }
 
     cards.botCard = botCardsList;
     cards.playerCard = playerCardsList;
