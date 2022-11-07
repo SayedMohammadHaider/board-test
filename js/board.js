@@ -16,6 +16,7 @@ var placedCardBorderLeft = 6;
 var loadBotImageBefore = '';
 var loadPlayerImageBefore = '';
 
+
 pageLoad();
 
 function pageLoad() {
