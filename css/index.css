@@ -19,22 +19,18 @@ body {
 }
 
 .outerContent {
-    padding: 2% 10%;
-    height: 96%;
+    height: 100%; 
 }
 
 .innerContent {
     height: 100%;
-    border: 5px solid #787833;
 }
 
 .boxes {
-    /* grid-template-columns: 1fr 1fr; */
-    display: grid;
-    /* place-items: center; */
-    margin-top: 50%;
     justify-content: space-evenly;
-    grid-auto-flow: column;
+    align-items: center;
+    display: flex;
+    height: 100%;
 }
 
 .boxDesign {
