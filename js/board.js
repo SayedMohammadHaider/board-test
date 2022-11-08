@@ -20,13 +20,17 @@ var loadPlayerImageBefore = '';
 pageLoad();
 
 function pageLoad() {
+    var currentCoin = localStorage.getItem('coin');
+    if (currentCoin == undefined || currentCoin == null) {
+        localStorage.setItem('coin', 100);
+    }
     const randomIntArrayInRange = (min, max, n = 1) =>
         Array.from(
             { length: n },
             () => Math.floor(Math.random() * (max - min + 1)) + min
         );
     var botCardsList = randomIntArrayInRange(1, allCard.length, 20);
-    var playerCardsList = randomIntArrayInRange(1, allCard.length, 20);    
+    var playerCardsList = randomIntArrayInRange(1, allCard.length, 20);
     var upcomingBotResult = allCard.find(({ sn }) => sn === botCardsList[0]);
     toDataUrl(upcomingBotResult.image, function (myBase64) {
         loadBotImageBefore = myBase64;
@@ -70,7 +74,7 @@ function heroClick() {
             else {
                 placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + loadPlayerImageBefore + '" />';
             }
-           
+
             toDataUrl(upcomingPlayerResult.image, function (myBase64) {
                 loadPlayerImageBefore = myBase64;
             });
@@ -119,12 +123,21 @@ function botFlipCardSound() {
 }
 
 function wonMessage(isPlayerWon = false) {
+    var currentCoin = parseInt(localStorage.getItem("coin"));
     document.getElementById('setupDialogBox').style.visibility = "visible";
     var message = "You Lose";
     if (isPlayerWon) {
+        document.getElementById('wonCoinMessage').innerHTML = 'You won 10 coins';
+        currentCoin = currentCoin + 10;
+        localStorage.setItem('coin', currentCoin);
         message = "You Won";
     }
-    document.getElementById('winMessage').innerHTML = message;
+    else {
+        document.getElementById('wonCoinMessage').innerHTML = 'You lose 10 coins';
+        currentCoin = currentCoin - 10;
+        localStorage.setItem('coin', currentCoin);
+    }
+    // document.getElementById('winMessage').innerHTML = message;
 }
 
 function toDataUrl(url, callback) {
@@ -153,7 +166,7 @@ function botAutoClick() {
             var result = allCard.find(({ sn }) => sn === cardValue);
             var matchResult = checkMatch(result.heroMatchId);
             cards.placedCard.push(result);
-            var heroName = heroNameList.find(x => x.id === result.heroMatchId).name;            
+            var heroName = heroNameList.find(x => x.id === result.heroMatchId).name;
             botHeroNameDiv.innerHTML = '<h4>' + heroName + '</h4>';
             var upcomingCardValue = cards.botCard[botCurrentIndex + 1];
             var upcomingBotResult = allCard.find(({ sn }) => sn === upcomingCardValue);

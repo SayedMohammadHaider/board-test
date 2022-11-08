@@ -124,7 +124,7 @@ body {
 }
 
 .setupDialogBoxBody{
-    padding: 50px;
+    padding: 50px 10px;
     width: auto;
     height: auto;
     margin: auto;

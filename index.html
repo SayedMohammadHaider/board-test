@@ -5,17 +5,30 @@
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBD81131M"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-WNBD81131M');
+    gtag('config', 'G-WNBD81131M');
 </script>
 
 <body>
     <div class="mainContent">
         <div class="outerContent">
             <div class="innerContent">
+                <div class="profileHeader">
+                    <div class="profileIconDiv">
+                        <img class="profileIcon" src="Images/Profile Icon.png" />
+                        <br>
+                        Player
+                    </div>
+                    <div class="coin">
+                        <img class="coinImage" src="Images/coin-icon.png" />                       
+                    </div>
+                    <div class="coinCountDiv">
+                        <span class="coinCount" id="coinCountId">00</span>
+                    </div>
+                </div>
                 <div class="boxes">
                     <div class="playWithBotBox boxDesign" onclick="location.href='board.html'">
                         <div class="vsBox">
@@ -30,9 +43,14 @@
                             VS
                         </div>
                         <div class="playWithButton">
-                            Player                            
+                            Player
                         </div>
                     </div>
+                </div>
+                <div class="bottomDiv">
+                    <!-- <div class="changeHeroButton" onclick="location.href='heroList.html'">
+                        Change Hero
+                    </div> -->
                 </div>
             </div>
         </div>
