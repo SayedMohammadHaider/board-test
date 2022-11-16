@@ -31,6 +31,8 @@ function pageLoad() {
         );
     var botCardsList = randomIntArrayInRange(1, allCard.length, 20);
     var playerCardsList = randomIntArrayInRange(1, allCard.length, 20);
+    console.log(botCardsList);
+    console.log(playerCardsList);
     var upcomingBotResult = allCard.find(({ sn }) => sn === botCardsList[0]);
     toDataUrl(upcomingBotResult.image, function (myBase64) {
         loadBotImageBefore = myBase64;
@@ -39,18 +41,6 @@ function pageLoad() {
     toDataUrl(upcomingPlayerResult.image, function (myBase64) {
         loadPlayerImageBefore = myBase64;
     });
-
-    //// below logic is to check who wins first
-    // for (var i = 0; i < botCardsList.length - 1; i++) {
-    //     console.log(playerCardsList[i]);
-    //     if (allCard.find(({ sn }) => sn === botCardsList[i]).heroMatchId == allCard.find(({ sn }) => sn === playerCardsList[i + 1]).heroMatchId) {
-    //         console.log("player wins");
-    //     }
-    //     if (allCard.find(({ sn }) => sn === botCardsList[i]).heroMatchId == allCard.find(({ sn }) => sn === playerCardsList[i]).heroMatchId) {
-    //         console.log("Bot wins");
-    //     }
-    // }
-
     cards.botCard = botCardsList;
     cards.playerCard = playerCardsList;
 }
