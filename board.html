@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link href="css/board.css" rel="stylesheet" />
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBD81131M"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="css/board.css" rel="stylesheet" />
 
-  gtag('config', 'G-WNBD81131M');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBD81131M"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-WNBD81131M');
+    </script>
+</head>
 
 <body>
     <div class="mainContent" id="mainContentId">
@@ -36,7 +39,7 @@
 
             </div>
             <div class="card" id="playerCardId">
-                <img onclick="heroClick()" class="playerCard" src="Images/CardBack.png" />
+                <img id="heroClickId" class="playerCard" src="Images/CardBack.png" />
             </div>
             <div class="winnerBox" id="playerWinnerBoxId">
                 Player Wins
@@ -47,17 +50,34 @@
     <div id="setupDialogBox">
         <div class="setupDialogBoxBody">
             <p id="wonCoinMessage"></p>
-            <!-- <p id="winMessage"></p>            -->
-            <a href='#' onClick="window.location.reload();">Replay</a>
+            <input type="button" value="Replay" id="playAgain" class="replayButton" />
             <br>
             <a href="index.html">Exit</a>
         </div>
     </div>
+    <div class="spinner" id="spinner"></div>
+    <div class="waitMessage" id="waitMessage"></div>
+    <!-- <div class="waitMessage" id="waitMessage">Your friend is asking for rematch. Click here to play it again.</div> -->
+    <div id="setupRoomIdBox">
+        <div class="setupRoomIdBoxBody">
+            <label>Your Room Id: <span id="yourRoomId" class="roomId"></span></label>
+            <br />
+            <br />
+            <input type="text" id="friendSocketId" placeholder="Enter your friend room id" value="" />
+            <br />
+            <br />
+            <input type="submit" id="friendIdSubmitted" value="Play" />
+            <br />
+            <br />
+            <label id="invalidId"></label>
+        </div>
+    </div>
 
 </body>
+
 </html>
 
 <script src="js/data.js"></script>
 <script src="js/base64/botCardSound.js"></script>
 <script src="js/base64/playerCardSound.js"></script>
-<script src="js/board.js"></script>
+<script src="js/board.js" type="module"></script>

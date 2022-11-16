@@ -89,6 +89,13 @@ body {
     margin-top: 50%;
 }
 
+.replayButton{
+    cursor: pointer;
+    background: no-repeat;
+    border: none;
+    text-decoration: underline;
+}
+
 #botWinnerBoxId {
     display: none;
 }
@@ -139,4 +146,71 @@ body {
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
+}
+
+.spinner {
+    display: none;
+    background-repeat: no-repeat !important;
+    position: absolute;
+    height: 150px;
+    width: 150px;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+    background: url(../Images/spinner.gif);
+    background-size: 100%;
+    background-color: #53c486;
+    border: 2px solid #666666;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+
+.waitMessage{
+    display: none;
+    background-repeat: no-repeat !important;
+    position: absolute;   
+    color: white;
+    top: 62%;
+    left: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+    background-size: 100%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+
+#setupRoomIdBox{
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 1000;
+}
+
+.setupRoomIdBoxBody{
+    padding: 50px 10px;
+    width: 96%;
+    height: 87%;
+    margin: auto;
+    background-color: #53c486;
+    border: 2px solid #666666;
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    position: absolute;
+    left: 50%;
+    bottom: -50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+
+.roomId{
+    color: blue;
 }

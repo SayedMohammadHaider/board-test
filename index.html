@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link href="css/index.css" rel="stylesheet" />
+<html lang="en">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBD81131M"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="css/index.css" rel="stylesheet" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBD81131M"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-WNBD81131M');
-</script>
+        gtag('config', 'G-WNBD81131M');
+    </script>
+</head>
 
 <body>
     <div class="mainContent">
@@ -23,7 +28,7 @@
                         Player
                     </div>
                     <div class="coin">
-                        <img class="coinImage" src="Images/coin-icon.png" />                       
+                        <img class="coinImage" src="Images/coin-icon.png" />
                     </div>
                     <div class="coinCountDiv">
                         <span class="coinCount" id="coinCountId">00</span>
@@ -38,23 +43,21 @@
                             Computer
                         </div>
                     </div>
-                    <div class="playWithPlayerBox boxDesign">
+                    <div class="playWithPlayerBox boxDesign" onclick="location.href='board.html?isFriend=true'">
                         <div class="vsBox">
                             VS
                         </div>
                         <div class="playWithButton">
-                            Player
+                            Friend
                         </div>
                     </div>
                 </div>
                 <div class="bottomDiv">
-                    <!-- <div class="changeHeroButton" onclick="location.href='heroList.html'">
-                        Change Hero
-                    </div> -->
                 </div>
             </div>
         </div>
     </div>
 </body>
-<script src="js/index.js"></script>
+
 </html>
+<script src="js/index.js" type="module"></script>

@@ -9,7 +9,3 @@ function pageLoad() {
     var coinCountIdDiv = document.getElementById('coinCountId');
     coinCountIdDiv.innerHTML = currentCoin;
 }
-
-function playWithBotIdClick() {
-    window.location.href = "board.html";
-}

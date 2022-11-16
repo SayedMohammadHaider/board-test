@@ -1,3 +1,5 @@
+import { io } from 'socket.io-client';
+
 var cards = {
     botCard: [],
     placedCard: [],
@@ -7,6 +9,13 @@ var playerCardIdDiv = document.getElementById('playerCardId');
 var placedCardIdDiv = document.getElementById('placedCardId');
 var botHeroNameDiv = document.getElementById('botHeroName');
 var playerHeroNameDiv = document.getElementById('playerHeroName');
+var heroClick = document.getElementById('heroClickId');
+var yourRoomId = document.getElementById('yourRoomId');
+var friendIdSubmitted = document.getElementById('friendIdSubmitted');
+var friendSocketId = document.getElementById('friendSocketId');
+var invalidId = document.getElementById('invalidId');
+var playAgain = document.getElementById('playAgain');
+var roomId = null;
 var playerCurrentIndex = 0;
 var botCurrentIndex = 0;
 var release = true;
@@ -15,42 +24,139 @@ var isBotCardEmpty = false;
 var placedCardBorderLeft = 6;
 var loadBotImageBefore = '';
 var loadPlayerImageBefore = '';
+var currentPlayerSocketId = '';
+var isPlayingWithFriend = false;
 
+const socket = io('http://localhost:3000');
+socket.on('connect', () => {
+    console.log(socket.id);
+    currentPlayerSocketId = socket.id;
+    yourRoomId.innerHTML = socket.id;
+});
+
+socket.on("receiveMessage", (friendCardIndex, friendCardNextIndex, playerRoomId) => {
+    roomId = playerRoomId;
+    playerClick(friendCardIndex, friendCardNextIndex)
+});
+
+socket.on("startMatchMessage", (startMatch) => {
+    if (startMatch)
+        document.getElementById('setupRoomIdBox').style.visibility = "hidden";
+});
+
+socket.on("rematchMessage", (rematch) => {
+    if (rematch) {
+        resetGame();
+    }
+});
 
 pageLoad();
 
 function pageLoad() {
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
+    isPlayingWithFriend = params.isFriend;
     var currentCoin = localStorage.getItem('coin');
     if (currentCoin == undefined || currentCoin == null) {
         localStorage.setItem('coin', 100);
     }
+    loadPlayerCard();
+    if (isPlayingWithFriend == "true") {
+        document.getElementById('setupRoomIdBox').style.visibility = "visible";
+    }
+    else {
+        loadBotCard();
+    }
+}
+
+function loadPlayerCard() {
+    const randomIntArrayInRange = (min, max, n = 1) =>
+        Array.from(
+            { length: n },
+            () => Math.floor(Math.random() * (max - min + 1)) + min
+        );
+    var playerCardsList = randomIntArrayInRange(1, allCard.length, 20);
+    console.log(playerCardsList);
+    var upcomingPlayerResult = allCard.find(({ sn }) => sn === playerCardsList[0]);
+    toDataUrl(upcomingPlayerResult.image, function (myBase64) {
+        loadPlayerImageBefore = myBase64;
+    });
+    cards.playerCard = playerCardsList;
+}
+
+function loadBotCard() {
     const randomIntArrayInRange = (min, max, n = 1) =>
         Array.from(
             { length: n },
             () => Math.floor(Math.random() * (max - min + 1)) + min
         );
     var botCardsList = randomIntArrayInRange(1, allCard.length, 20);
-    var playerCardsList = randomIntArrayInRange(1, allCard.length, 20);
     console.log(botCardsList);
-    console.log(playerCardsList);
     var upcomingBotResult = allCard.find(({ sn }) => sn === botCardsList[0]);
     toDataUrl(upcomingBotResult.image, function (myBase64) {
         loadBotImageBefore = myBase64;
     });
-    var upcomingPlayerResult = allCard.find(({ sn }) => sn === playerCardsList[0]);
-    toDataUrl(upcomingPlayerResult.image, function (myBase64) {
-        loadPlayerImageBefore = myBase64;
-    });
     cards.botCard = botCardsList;
-    cards.playerCard = playerCardsList;
 }
 
-function heroClick() {
+playAgain.addEventListener("click", () => {
+    if (isPlayingWithFriend == "true") {
+        socket.emit("rematch", true, roomId);
+        resetGame();
+    }
+    else {
+        window.location.reload();
+    }
+});
+
+function resetGame() {
+    loadPlayerCard();
+    placedCardIdDiv.innerHTML = '';
+    document.getElementById('setupDialogBox').style.visibility = "hidden";
+    release = true;
+    isGameEnd = false;
+    playerHeroNameDiv.innerHTML = '';
+    botHeroNameDiv.innerHTML = '';
+}
+
+// This method is to show spinner
+function showSpinner() {
+    document.getElementById("spinner").style.display = "block";
+}
+
+function showWaitMessage(message) {
+    document.getElementById("waitMessage").style.display = "block";
+    document.getElementById("waitMessage").innerHTML = message;
+}
+
+function hideWaitMessage() {
+    document.getElementById("waitMessage").style.display = "none";
+}
+
+// Method to hide spinner
+function hideSpinner() {
+    document.getElementById("spinner").style.display = "none";
+}
+
+friendIdSubmitted.addEventListener("click", () => {
+    if (friendSocketId.value == null || friendSocketId.value == "") {
+        invalidId.innerHTML = "Please enter friend room id or ask your friend to enter your room id";
+    }
+    else {
+        document.getElementById('setupRoomIdBox').style.visibility = "hidden";
+        roomId = friendSocketId.value;
+        socket.emit("startMatch", true, friendSocketId.value);
+    }
+});
+
+heroClick.addEventListener("click", () => {
     if (!isGameEnd) {
         if (release) {
             playerFlipCardSound();
             var cardLength = cards.playerCard.length;
             var cardValue = cards.playerCard[playerCurrentIndex];
+            console.log(cardValue);
             var result = allCard.find(({ sn }) => sn === cardValue);
             var matchResult = checkMatch(result.heroMatchId, false);
             cards.placedCard.push(result);
@@ -69,6 +175,13 @@ function heroClick() {
                 loadPlayerImageBefore = myBase64;
             });
 
+            if (isPlayingWithFriend == "true") {
+                socket.emit("sendMessage", cardValue, upcomingCardValue, currentPlayerSocketId, roomId);
+            }
+            else {
+                botAutoClick();
+            }
+            release = false;
             placedCardBorderLeft++;
             if (matchResult && matchResult.botWins == false) {
                 isGameEnd = true;
@@ -83,10 +196,9 @@ function heroClick() {
             if (isBotCardEmpty) {
                 isGameEnd = true;
             }
-            botAutoClick();
         }
     }
-}
+});
 
 function checkMatch(matchId, isBot = true) {
     if (cards.placedCard.length > 0) {
@@ -115,19 +227,16 @@ function botFlipCardSound() {
 function wonMessage(isPlayerWon = false) {
     var currentCoin = parseInt(localStorage.getItem("coin"));
     document.getElementById('setupDialogBox').style.visibility = "visible";
-    var message = "You Lose";
     if (isPlayerWon) {
         document.getElementById('wonCoinMessage').innerHTML = 'You won 10 coins';
         currentCoin = currentCoin + 10;
         localStorage.setItem('coin', currentCoin);
-        message = "You Won";
     }
     else {
         document.getElementById('wonCoinMessage').innerHTML = 'You lose 10 coins';
         currentCoin = currentCoin - 10;
         localStorage.setItem('coin', currentCoin);
     }
-    // document.getElementById('winMessage').innerHTML = message;
 }
 
 function toDataUrl(url, callback) {
@@ -142,6 +251,45 @@ function toDataUrl(url, callback) {
     xhr.open('GET', url);
     xhr.responseType = 'blob';
     xhr.send();
+}
+
+function playerClick(friendCardIndex, friendCardNextIndex) {
+    if (friendCardNextIndex != null) {
+        botFlipCardSound();
+        var cardLength = cards.botCard.length;
+        // var cardValue = cards.botCard[friendCardIndex];
+        var result = allCard.find(({ sn }) => sn === friendCardIndex);
+        var matchResult = checkMatch(result.heroMatchId);
+        cards.placedCard.push(result);
+        var heroName = heroNameList.find(x => x.id === result.heroMatchId).name;
+        botHeroNameDiv.innerHTML = '<h4>' + heroName + '</h4>';
+        // var upcomingCardValue = cards.botCard[friendCardNextIndex + 1];
+        var upcomingBotResult = allCard.find(({ sn }) => sn === friendCardNextIndex);
+        if (loadBotImageBefore == '') {
+            placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + result.image + '" />'
+        }
+        else {
+            placedCardIdDiv.innerHTML = '<img class="cardPlacedImg" style="border-left-width: ' + placedCardBorderLeft + 'px;" src="' + loadBotImageBefore + '" />'
+        }
+
+        toDataUrl(upcomingBotResult.image, function (myBase64) {
+            loadBotImageBefore = myBase64;
+        });
+
+        if (matchResult && matchResult.botWins == true) {
+            isGameEnd = true;
+            wonMessage(false);
+            return;
+        }
+        release = true;
+        // if (cardLength <= botCurrentIndex + 1) {
+        //     var botCardIdDiv = document.getElementById('botCardId');
+        //     botCardIdDiv.innerHTML = '';
+        //     isBotCardEmpty = true;
+        //     return;
+        // }
+        // botCurrentIndex = botCurrentIndex + 1;
+    }
 }
 
 function botAutoClick() {
