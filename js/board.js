@@ -111,6 +111,9 @@ playAgain.addEventListener("click", () => {
 });
 
 function resetGame() {
+    loadBotImageBefore = '';
+    playerCurrentIndex = 0;
+    placedCardBorderLeft = 6;
     loadPlayerCard();
     placedCardIdDiv.innerHTML = '';
     document.getElementById('setupDialogBox').style.visibility = "hidden";
